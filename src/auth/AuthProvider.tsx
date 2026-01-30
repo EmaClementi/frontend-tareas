@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import { AuthContext } from "./AuthContext";
 
@@ -21,16 +21,31 @@ export function AuthProvider({ children }: Props) {
     localStorage.removeItem("token");
   };
 
+  // Sincronizar estado con cambios en localStorage (múltiples pestañas)
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "token") {
+        setToken(e.newValue);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
   return (
     <AuthContext.Provider
-        value={{
+      value={{
         token,
         isAuthenticated: !!token,
         login,
         logout,
-     }}
+      }}
     >
-        {children}
+      {children}
     </AuthContext.Provider>
   );
 }

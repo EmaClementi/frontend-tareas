@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../service/api";
 import { FormInput } from "../../Components/FormImput/FormInput";
+import { Button } from "../../Components/Button/Button"; // 🆕
 import { useFormError } from "../../hooks/useFormError";
 import "./Register.css";
 
@@ -96,13 +97,13 @@ export function Register() {
             maxLength={10}
           />
 
-          <button
+          <Button
             type="submit"
-            className="register-button"
+            variant="primary"
             disabled={loading}
           >
             {loading ? "Registrando..." : "Registrarse"}
-          </button>
+          </Button>
         </form>
 
         <div className="register-links">

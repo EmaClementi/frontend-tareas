@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/UserAuth";
+import { Button } from "../../Components/Button/Button";
 import "./Home.css";
 
 export function Home() {
@@ -39,65 +40,21 @@ export function Home() {
         <div className="home-button-container">
           {isAuthenticated ? (
             <>
-              <button
-                className="home-button home-button-primary"
-                onClick={() => navigate("/tareas")}
-                onMouseOver={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.transform =
-                    "scale(1.05)";
-                }}
-                onMouseOut={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.transform =
-                    "scale(1)";
-                }}
-              >
+              <Button variant="primary" onClick={() => navigate("/tareas")}>
                 Ver mis tareas
-              </button>
-              <button
-                className="home-button home-button-secondary"
-                onClick={handleLogout}
-                onMouseOver={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.transform =
-                    "scale(1.05)";
-                }}
-                onMouseOut={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.transform =
-                    "scale(1)";
-                }}
-              >
+              </Button>
+              <Button variant="secondary" onClick={handleLogout}>
                 Cerrar sesión
-              </button>
+              </Button>
             </>
           ) : (
             <>
-              <button
-                className="home-button home-button-primary"
-                onClick={() => navigate("/login")}
-                onMouseOver={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.transform =
-                    "scale(1.05)";
-                }}
-                onMouseOut={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.transform =
-                    "scale(1)";
-                }}
-              >
+              <Button variant="primary" onClick={() => navigate("/login")}>
                 Iniciar sesión
-              </button>
-              <button
-                className="home-button home-button-secondary"
-                onClick={() => navigate("/register")}
-                onMouseOver={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.transform =
-                    "scale(1.05)";
-                }}
-                onMouseOut={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.transform =
-                    "scale(1)";
-                }}
-              >
+              </Button>
+              <Button variant="secondary" onClick={() => navigate("/register")}>
                 Registrarse
-              </button>
+              </Button>
             </>
           )}
         </div>

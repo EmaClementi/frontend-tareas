@@ -1,0 +1,147 @@
+.task-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40px 20px;
+  font-family: Arial, sans-serif;
+}
+
+.task-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.task-header h1 {
+  font-size: 36px;
+  margin: 0;
+}
+
+.task-logout {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border: 2px solid #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.task-logout:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.task-loading,
+.task-empty,
+.task-error {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  padding: 40px;
+  text-align: center;
+}
+
+.task-loading {
+  font-size: 18px;
+  color: #333;
+}
+
+.task-empty {
+  color: #666;
+}
+
+.task-empty-sub {
+  font-size: 14px;
+  color: #999;
+}
+
+.task-error {
+  margin-bottom: 20px;
+  color: #c62828;
+  font-weight: bold;
+}
+/* Estilos existentes... */
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.task-header h1 {
+  font-size: 36px;
+  margin: 0;
+}
+
+/* Mensaje de lista vacía */
+.task-empty {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  padding: 60px 40px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.task-empty p {
+  font-size: 1.3rem;
+  margin: 0 0 10px 0;
+  color: #374151;
+}
+
+.task-empty-sub {
+  font-size: 1rem;
+  color: #6b7280;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .task-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .task-header h1 {
+    font-size: 28px;
+    text-align: center;
+  }
+
+  .task-header button {
+    width: 100%;
+  }
+}
+/* Estilos existentes... */
+
+/* Loading overlay */
+.task-loading-overlay {
+  position: relative;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.task-spinner {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-weight: 600;
+  color: #667eea;
+}
+
+/* Resultados */
+.task-results-info {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.task-results-info strong {
+  color: #667eea;
+  font-weight: 700;
+}

@@ -1,14 +1,16 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { AuthProvider } from "./auth/AuthProvider";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 import { App } from "./App";
-import "./main.css";
+import { AuthProvider } from "./auth/AuthProvider";
+import { ToastProvider } from "./context/ToastProvider";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
     <AuthProvider>
-      <App />
+      <ToastProvider>
+        <App />
+      </ToastProvider>
     </AuthProvider>
-  </React.StrictMode>
+  </StrictMode>
 );
-

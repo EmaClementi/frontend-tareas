@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { login as loginService } from "../../auth/AuthService";
 import { useAuth } from "../../auth/UserAuth";
 import { FormInput } from "../../Components/FormImput/FormInput";
+import { Button } from "../../Components/Button/Button"; // 🆕
 import { useFormError } from "../../hooks/useFormError";
 import "./Login.css";
 
@@ -58,13 +59,13 @@ export function Login() {
             required
           />
 
-          <button
+          <Button
             type="submit"
-            className="login-button"
+            variant="primary"
             disabled={loading}
           >
             {loading ? "Cargando..." : "Entrar"}
-          </button>
+          </Button>
         </form>
 
         <div className="login-links">

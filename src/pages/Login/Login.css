@@ -46,29 +46,9 @@
   text-align: center;
 }
 
-/* Botón */
-.login-button {
+.login-card form .btn {
   width: 100%;
-  padding: 12px;
   margin-top: 10px;
-  background-color: #667eea;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
-}
-
-.login-button:hover:not(:disabled) {
-  background-color: #5568d3;
-  transform: translateY(-2px);
-}
-
-.login-button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
 }
 
 /* Links */

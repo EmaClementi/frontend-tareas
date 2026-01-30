@@ -1,0 +1,228 @@
+.task-filters-container {
+  margin-bottom: 1.5rem;
+}
+
+/* Barra de búsqueda principal */
+.task-search-bar {
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.task-search-input-wrapper {
+  flex: 1;
+  min-width: 300px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.task-search-icon {
+  position: absolute;
+  left: 1rem;
+  font-size: 1.2rem;
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.task-search-input {
+  width: 100%;
+  padding: 0.8rem 3rem 0.8rem 3rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.task-search-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.task-search-clear {
+  position: absolute;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.task-search-clear:hover {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+/* Panel lateral de filtros */
+.task-filters-panel {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.task-filters-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.task-filters-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.task-filters-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.task-filters-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.task-filters-content {
+  padding: 1.5rem;
+}
+
+.task-filters-section {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.task-filters-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.task-filters-section h4 {
+  margin: 0 0 0.8rem 0;
+  font-size: 0.95rem;
+  color: #374151;
+  font-weight: 600;
+}
+
+/* Toggle de secciones colapsables */
+.task-filters-section-toggle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  transition: opacity 0.2s;
+}
+
+.task-filters-section-toggle:hover {
+  opacity: 0.7;
+}
+
+.task-filters-section-toggle span {
+  color: #9ca3af;
+  font-size: 0.9rem;
+}
+
+.task-filters-subsection {
+  margin-top: 1rem;
+  padding-left: 0.5rem;
+}
+
+/* Filtros rápidos */
+.task-quick-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.task-quick-filter {
+  padding: 0.5rem 1rem;
+  border: 2px solid #e5e7eb;
+  background: #ffffff;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #374151;
+}
+
+.task-quick-filter:hover {
+  border-color: #667eea;
+  background: #f8f9ff;
+}
+
+.task-quick-filter.active {
+  border-color: #667eea;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+/* Botones de acción */
+.task-filters-actions {
+  display: flex;
+  gap: 0.8rem;
+  padding: 1.5rem;
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+}
+
+.task-filters-actions button {
+  flex: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .task-search-bar {
+    flex-direction: column;
+  }
+
+  .task-search-input-wrapper {
+    min-width: 100%;
+  }
+
+  .task-search-bar button {
+    width: 100%;
+  }
+
+  .task-filters-actions {
+    flex-direction: column;
+  }
+}
