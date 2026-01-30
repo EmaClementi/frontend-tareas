@@ -1,0 +1,100 @@
+.stats-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-left: 4px solid;
+}
+
+.stats-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Colores por tipo */
+.stats-card-blue { border-color: #3b82f6; }
+.stats-card-green { border-color: #10b981; }
+.stats-card-orange { border-color: #f59e0b; }
+.stats-card-red { border-color: #ef4444; }
+.stats-card-purple { border-color: #8b5cf6; }
+.stats-card-gray { border-color: #6b7280; }
+
+/* Header */
+.stats-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.stats-card-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.stats-card-title {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Valor */
+.stats-card-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+/* Subtitle */
+.stats-card-subtitle {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  margin-bottom: 1rem;
+}
+
+/* Barra de progreso */
+.stats-card-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.stats-card-progress-bar {
+  flex: 1;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.stats-card-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.stats-card-percentage {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+  min-width: 45px;
+  text-align: right;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stats-card {
+    padding: 1.2rem;
+  }
+
+  .stats-card-value {
+    font-size: 2rem;
+  }
+}

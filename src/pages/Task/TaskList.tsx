@@ -156,6 +156,9 @@ export function Task() {
       <div className="task-content">
         <header className="task-header">
           <h1>📋 Mis tareas</h1>
+          <Button variant="primary" onClick={() => navigate("/dashboard")}>
+            📊 Dashboard
+          </Button>
           <Button variant="secondary" onClick={handleLogout}>
             🚪 Salir
           </Button>

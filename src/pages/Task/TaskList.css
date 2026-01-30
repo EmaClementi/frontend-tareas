@@ -145,3 +145,14 @@
   color: #667eea;
   font-weight: 700;
 }
+.task-header-actions {
+  display: flex;
+  gap: 0.8rem;
+}
+
+@media (max-width: 640px) {
+  .task-header-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+}
