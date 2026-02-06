@@ -18,7 +18,7 @@ export type FiltrosState = {
 type Props = {
   filtros: FiltrosState;
   onFiltrosChange: (filtros: FiltrosState) => void;
-  onAplicar: () => void;
+  onAplicar: (filtrosCustom?: FiltrosState) => void; // 🆕
   onLimpiar: () => void;
   mostrarFiltros: boolean;
   onToggleFiltros: () => void;
@@ -42,6 +42,21 @@ export function TaskFilters({
       ...filtros,
       [campo]: valor,
     });
+  };
+
+  // 🆕 FUNCIÓN MEJORADA
+  const aplicarOrdenamiento = (ordenarPor: string, direccion: string) => {
+    const nuevosFiltros: FiltrosState = {
+      ...filtros,
+      ordenarPor,
+      direccion
+    };
+    
+    // Actualizar estado local
+    onFiltrosChange(nuevosFiltros);
+    
+    // Aplicar inmediatamente con los nuevos filtros
+    onAplicar(nuevosFiltros);
   };
 
   const contarFiltrosActivos = () => {
@@ -88,7 +103,7 @@ export function TaskFilters({
           🎯 Filtros {filtrosActivos > 0 && `(${filtrosActivos})`}
         </Button>
 
-        <Button variant="primary" onClick={onAplicar}>
+        <Button variant="primary" onClick={() => onAplicar()}>
           Buscar
         </Button>
       </div>
@@ -115,6 +130,62 @@ export function TaskFilters({
                   ⚠️ Vencidas
                 </button>
               </div>
+            </div>
+
+            {/* 🆕 SECCIÓN DE ORDENAMIENTO MEJORADA */}
+            <div className="task-filters-section">
+              <h4>🔀 Ordenamiento</h4>
+              <div className="task-quick-filters">
+                <button
+                  className={`task-quick-filter ${!filtros.ordenarPor ? "active" : ""}`}
+                  onClick={() => aplicarOrdenamiento("", "ASC")}
+                  title="Orden inteligente: vencidas primero, luego por importancia y fecha"
+                >
+                  ⚡ Inteligente
+                </button>
+                
+                <button
+                  className={`task-quick-filter ${filtros.ordenarPor === "fechaVencimiento" ? "active" : ""}`}
+                  onClick={() => aplicarOrdenamiento("fechaVencimiento", "ASC")}
+                >
+                  📅 Por fecha
+                </button>
+                
+                <button
+                  className={`task-quick-filter ${filtros.ordenarPor === "importancia" ? "active" : ""}`}
+                  onClick={() => aplicarOrdenamiento("importancia", "DESC")}
+                >
+                  ⚡ Por importancia
+                </button>
+                
+                <button
+                  className={`task-quick-filter ${filtros.ordenarPor === "fechaCreacion" ? "active" : ""}`}
+                  onClick={() => aplicarOrdenamiento("fechaCreacion", "DESC")}
+                >
+                  🆕 Más recientes
+                </button>
+              </div>
+              
+              {/* Tooltip explicativo */}
+              {!filtros.ordenarPor && (
+                <div className="task-sort-explanation">
+                  <p>
+                    <small>
+                      <strong>Orden inteligente:</strong>
+                      <br />
+                      1️⃣ Tareas vencidas (más urgentes primero)
+                      <br />
+                      2️⃣ Vencen hoy
+                      <br />
+                      3️⃣ Por importancia (Alta → Media → Baja)
+                      <br />
+                      4️⃣ Por fecha de vencimiento
+                      <br />
+                      5️⃣ Completadas y canceladas al final
+                    </small>
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Estado */}
@@ -211,40 +282,11 @@ export function TaskFilters({
                 </div>
               )}
             </div>
-
-            {/* Ordenamiento */}
-            <div className="task-filters-section">
-              <h4>🔄 Ordenar por</h4>
-              <FormInput
-                type="select"
-                value={filtros.ordenarPor}
-                onChange={(e) => handleChange("ordenarPor", e.target.value)}
-                options={[
-                  { value: "", label: "Sin ordenar" },
-                  { value: "fechaVencimiento", label: "Fecha de vencimiento" },
-                  { value: "fechaCreacion", label: "Fecha de creación" },
-                  { value: "importancia", label: "Importancia" },
-                  { value: "nombre", label: "Nombre" },
-                ]}
-              />
-
-              {filtros.ordenarPor && (
-                <FormInput
-                  type="select"
-                  value={filtros.direccion}
-                  onChange={(e) => handleChange("direccion", e.target.value)}
-                  options={[
-                    { value: "ASC", label: "Ascendente" },
-                    { value: "DESC", label: "Descendente" },
-                  ]}
-                />
-              )}
-            </div>
           </div>
 
           {/* Botones de acción */}
           <div className="task-filters-actions">
-            <Button variant="primary" onClick={onAplicar}>
+            <Button variant="primary" onClick={() => onAplicar()}>
               Aplicar filtros
             </Button>
             <Button variant="secondary" onClick={onLimpiar}>

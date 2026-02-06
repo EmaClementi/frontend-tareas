@@ -6,6 +6,7 @@ import { Register } from "./pages/Register/Register";
 import { Login } from "./pages/Login/Login";
 import { Task } from "./pages/Task/TaskList";
 import { Dashboard } from "./pages/Dashboard/Dashboard";
+import './styles/variables.css'
 
 export function App() {
   return (

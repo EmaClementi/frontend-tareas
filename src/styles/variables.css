@@ -1,0 +1,115 @@
+:root {
+  /* ========== COLORES PRINCIPALES ========== */
+  --primary: #667eea;
+  --primary-dark: #5568d3;
+  --primary-darker: #4451b8;
+  --secondary: #764ba2;
+  --secondary-dark: #66428a;
+  
+  /* ========== ESTADOS DE TAREAS ========== */
+  --estado-pendiente: #ef4444;
+  --estado-pendiente-light: #fee2e2;
+  --estado-pendiente-border: #fca5a5;
+  
+  --estado-en-progreso: #3b82f6;
+  --estado-en-progreso-light: #dbeafe;
+  --estado-en-progreso-border: #93c5fd;
+  
+  --estado-completada: #10b981;
+  --estado-completada-light: #d1fae5;
+  --estado-completada-border: #6ee7b7;
+  
+  --estado-cancelada: #6b7280;
+  --estado-cancelada-light: #f3f4f6;
+  --estado-cancelada-border: #d1d5db;
+  
+  /* ========== IMPORTANCIA ========== */
+  --importancia-alta: #dc2626;
+  --importancia-media: #f59e0b;
+  --importancia-baja: #10b981;
+  
+  /* ========== VENCIMIENTOS ========== */
+  --vencida-bg: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  --vencida-color: #dc2626;
+  --vencida-border: #fca5a5;
+  
+  --hoy-bg: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  --hoy-color: #d97706;
+  --hoy-border: #fcd34d;
+  
+  --urgente-bg: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
+  --urgente-color: #ea580c;
+  --urgente-border: #fb923c;
+  
+  /* ========== NEUTRALES ========== */
+  --bg-main: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --bg-card: #ffffff;
+  --bg-card-hover: #fafafa;
+  --bg-input: #ffffff;
+  --bg-secondary: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+  --bg-tertiary: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+  --bg-editing: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+  
+  --border-light: #e5e7eb;
+  --border-medium: #d1d5db;
+  --border-focus: #667eea;
+  --border-dashed: #c7d2fe;
+  
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --text-tertiary: #9ca3af;
+  --text-heading: #111827;
+  --text-white: #ffffff;
+  
+  /* ========== ESPACIADOS ========== */
+  --spacing-xs: 0.25rem;    /* 4px */
+  --spacing-sm: 0.5rem;     /* 8px */
+  --spacing-md: 0.8rem;     /* 12.8px */
+  --spacing-lg: 1rem;       /* 16px */
+  --spacing-xl: 1.2rem;     /* 19.2px */
+  --spacing-2xl: 1.5rem;    /* 24px */
+  --spacing-3xl: 2rem;      /* 32px */
+  --spacing-4xl: 2.5rem;    /* 40px */
+  
+  /* ========== SOMBRAS ========== */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --shadow-focus: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  --shadow-focus-danger: 0 0 0 3px rgba(239, 68, 68, 0.2);
+  
+  /* ========== BORDES REDONDEADOS ========== */
+  --radius-sm: 0.5rem;      /* 8px */
+  --radius-md: 0.75rem;     /* 12px */
+  --radius-lg: 1rem;        /* 16px */
+  --radius-full: 9999px;    /* Completamente redondeado */
+  
+  /* ========== TRANSICIONES ========== */
+  --transition-fast: 150ms ease;
+  --transition-base: 200ms ease;
+  --transition-slow: 300ms ease;
+  
+  /* ========== TIPOGRAFÍA ========== */
+  --font-size-xs: 0.75rem;   /* 12px */
+  --font-size-sm: 0.85rem;   /* 13.6px */
+  --font-size-base: 0.95rem; /* 15.2px */
+  --font-size-md: 1rem;      /* 16px */
+  --font-size-lg: 1.1rem;    /* 17.6px */
+  --font-size-xl: 1.3rem;    /* 20.8px */
+  --font-size-2xl: 1.8rem;   /* 28.8px */
+  --font-size-3xl: 2.25rem;  /* 36px */
+  
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* ========== Z-INDEX ========== */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-tooltip: 1070;
+}

@@ -1,3 +1,4 @@
+/* ========== BACKDROP ========== */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -5,39 +6,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 999;
-
-  animation: fadeIn 0.2s ease-out;
+  z-index: var(--z-modal-backdrop);
+  animation: fadeIn var(--transition-base);
 }
-
-.modal {
-  background: #fff;
-  border-radius: 12px;
-  padding: 24px;
-  width: 100%;
-  max-width: 420px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-
-  animation: scaleIn 0.25s ease-out;
-}
-
-.modal h3 {
-  margin-top: 0;
-}
-
-.modal-content {
-  margin-top: 12px;
-}
-
-/* 🔹 Animaciones */
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ========== MODAL ========== */
+.modal {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-3xl);
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--shadow-lg);
+  animation: scaleIn 0.25s ease-out;
 }
 
 @keyframes scaleIn {
@@ -49,4 +35,14 @@
     opacity: 1;
     transform: scale(1) translateY(0);
   }
+}
+
+.modal h3 {
+  margin-top: 0;
+  color: var(--text-heading);
+  font-weight: var(--font-weight-bold);
+}
+
+.modal-content {
+  margin-top: var(--spacing-md);
 }

@@ -1,100 +1,102 @@
+/* ========== CARD ========== */
 .stats-card {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s, box-shadow 0.2s;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-2xl);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-base), 
+              box-shadow var(--transition-base);
   border-left: 4px solid;
 }
 
 .stats-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-md);
 }
 
-/* Colores por tipo */
-.stats-card-blue { border-color: #3b82f6; }
-.stats-card-green { border-color: #10b981; }
-.stats-card-orange { border-color: #f59e0b; }
-.stats-card-red { border-color: #ef4444; }
+/* ========== COLORES POR TIPO ========== */
+.stats-card-blue { border-color: var(--estado-en-progreso); }
+.stats-card-green { border-color: var(--estado-completada); }
+.stats-card-orange { border-color: var(--importancia-media); }
+.stats-card-red { border-color: var(--estado-pendiente); }
 .stats-card-purple { border-color: #8b5cf6; }
-.stats-card-gray { border-color: #6b7280; }
+.stats-card-gray { border-color: var(--estado-cancelada); }
 
-/* Header */
+/* ========== HEADER ========== */
 .stats-card-header {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
-  margin-bottom: 1rem;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
 }
 
 .stats-card-icon {
-  font-size: 2rem;
+  font-size: var(--font-size-3xl);
   line-height: 1;
 }
 
 .stats-card-title {
   margin: 0;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #6b7280;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-/* Valor */
+/* ========== VALOR ========== */
 .stats-card-value {
   font-size: 2.5rem;
-  font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 0.5rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-heading);
+  margin-bottom: var(--spacing-sm);
   line-height: 1;
 }
 
-/* Subtitle */
+/* ========== SUBTITLE ========== */
 .stats-card-subtitle {
-  font-size: 0.85rem;
-  color: #9ca3af;
-  margin-bottom: 1rem;
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  margin-bottom: var(--spacing-lg);
 }
 
-/* Barra de progreso */
+/* ========== BARRA DE PROGRESO ========== */
 .stats-card-progress {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: var(--spacing-md);
 }
 
 .stats-card-progress-bar {
   flex: 1;
   height: 8px;
-  background: #e5e7eb;
-  border-radius: 4px;
+  background: var(--border-light);
+  border-radius: var(--spacing-xs);
   overflow: hidden;
 }
 
 .stats-card-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-  border-radius: 4px;
-  transition: width 0.3s ease;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+  border-radius: var(--spacing-xs);
+  transition: width var(--transition-slow);
 }
 
 .stats-card-percentage {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #374151;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
   min-width: 45px;
   text-align: right;
 }
 
-/* Responsive */
+/* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
   .stats-card {
-    padding: 1.2rem;
+    padding: var(--spacing-xl);
   }
 
   .stats-card-value {
-    font-size: 2rem;
+    font-size: var(--font-size-3xl);
   }
 }

@@ -8,6 +8,7 @@ interface ErrorDetail {
 interface ErrorResponse {
   detalles?: ErrorDetail[];
   message?: string;
+  error?: string;
 }
 
 export function useFormError() {
@@ -24,9 +25,12 @@ export function useFormError() {
       setError(mensajes);
     } else if (errorData?.message) {
       setError(errorData.message);
+    } else if (errorData?.error) {
+      setError(errorData.error);
     } else {
       setError("Error al procesar la solicitud");
     }
+
   };
 
   const clearError = () => setError("");

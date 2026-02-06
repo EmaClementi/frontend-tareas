@@ -1,16 +1,16 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import type Task from "../../types/Task";
 import "./TaskCard.css";
 import { Button } from "../Button/Button";
-import { FormInput } from "../FormImput/FormInput"; // 🆕
 
 type Props = {
   task: Task;
   onUpdate: (id: number, data: Partial<Task>) => void;
   onRequestDelete: (task: Task) => void;
+  onDragStart?: (task: Task) => void;
 };
 
-export function TaskCard({ task, onUpdate, onRequestDelete }: Props) {
+export function TaskCard({ task, onUpdate, onRequestDelete, onDragStart }: Props) {
   const [editando, setEditando] = useState(false);
   const [nombre, setNombre] = useState(task.nombre);
   const [descripcion, setDescripcion] = useState(task.descripcion);
@@ -19,6 +19,9 @@ export function TaskCard({ task, onUpdate, onRequestDelete }: Props) {
   const [estado, setEstado] = useState<Task["estado"]>(task.estado);
   const [fechaInicio, setFechaInicio] = useState(task.fechaInicio || "");
   const [fechaVencimiento, setFechaVencimiento] = useState(task.fechaVencimiento || "");
+  const [isDragging, setIsDragging] = useState(false);
+  
+  const cardRef = useRef<HTMLDivElement>(null);
 
   if (
     !editando &&
@@ -76,13 +79,72 @@ export function TaskCard({ task, onUpdate, onRequestDelete }: Props) {
     return "";
   };
 
+  const handleDragStart = (e: React.DragEvent) => {
+    setIsDragging(true);
+    e.dataTransfer.effectAllowed = "move";
+    
+    if (cardRef.current) {
+      const clone = cardRef.current.cloneNode(true) as HTMLElement;
+      clone.style.position = "absolute";
+      clone.style.top = "-9999px";
+      clone.style.width = cardRef.current.offsetWidth + "px";
+      clone.style.opacity = "0.8";
+      clone.style.transform = "rotate(3deg)";
+      document.body.appendChild(clone);
+      e.dataTransfer.setDragImage(clone, 0, 0);
+      
+      setTimeout(() => document.body.removeChild(clone), 0);
+    }
+    
+    if (onDragStart) {
+      onDragStart(task);
+    }
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+  };
+
+  const getPrioridadBadge = () => {
+  const hoy = new Date().toISOString().split('T')[0];
+  
+  if (task.estado === "COMPLETADA" || task.estado === "CANCELADA") {
+    return null;
+  }
+  
+  if (task.estaVencida) {
+    return (
+      <span className="task-priority-badge priority-critical">
+        🔴 URGENTE - Vencida
+      </span>
+    );
+  }
+  
+  if (task.fechaVencimiento === hoy) {
+    return (
+      <span className="task-priority-badge priority-high">
+        🔥 VENCE HOY
+      </span>
+    );
+  }
+  
+  if (task.importancia === "ALTA" && task.diasRestantes && task.diasRestantes <= 3) {
+    return (
+      <span className="task-priority-badge priority-warning">
+        ⚠️ Alta prioridad
+      </span>
+    );
+  }
+  
+  return null;
+};
+
   if (editando) {
     return (
       <form className="task-card task-card-editing" onSubmit={handleSubmit}>
         <h3>✏️ Editando tarea</h3>
 
-        {/* 🆕 Usar FormInput */}
-        <FormInput
+        <input
           type="text"
           placeholder="Nombre de la tarea"
           value={nombre}
@@ -90,60 +152,57 @@ export function TaskCard({ task, onUpdate, onRequestDelete }: Props) {
           required
         />
 
-        <FormInput
-          type="textarea"
+        <textarea
           placeholder="Descripción"
           value={descripcion}
           onChange={(e) => setDescripcion(e.target.value)}
           rows={3}
         />
 
-        <FormInput
-          type="select"
+        <select
           value={importancia}
           onChange={(e) => setImportancia(e.target.value as "BAJA" | "MEDIA" | "ALTA")}
-          options={[
-            { value: "BAJA", label: "Baja" },
-            { value: "MEDIA", label: "Media" },
-            { value: "ALTA", label: "Alta" },
-          ]}
-        />
+        >
+          <option value="BAJA">Baja</option>
+          <option value="MEDIA">Media</option>
+          <option value="ALTA">Alta</option>
+        </select>
 
-        <FormInput
-          type="select"
-          value={estado}
-          onChange={(e) => setEstado(e.target.value as Task["estado"])}
-          options={[
-            { value: "PENDIENTE", label: "Pendiente" },
-            { value: "EN_PROGRESO", label: "En Progreso" },
-            { value: "COMPLETADA", label: "Completada" },
-            { value: "CANCELADA", label: "Cancelada" },
-          ]}
-        />
+        <select value={estado} onChange={(e) => setEstado(e.target.value as Task["estado"])}>
+          <option value="PENDIENTE">Pendiente</option>
+          <option value="EN_PROGRESO">En Progreso</option>
+          <option value="COMPLETADA">Completada</option>
+          <option value="CANCELADA">Cancelada</option>
+        </select>
 
         <div className="task-dates-edit">
-          <FormInput
-            type="date"
-            label="📅 Fecha de inicio"
-            value={fechaInicio}
-            onChange={(e) => setFechaInicio(e.target.value)}
-          />
+          <div>
+            <label>Fecha de inicio</label>
+            <input
+              type="date"
+              value={fechaInicio}
+              onChange={(e) => setFechaInicio(e.target.value)}
+            />
+          </div>
 
-          <FormInput
-            type="date"
-            label="⏰ Fecha de vencimiento"
-            value={fechaVencimiento}
-            onChange={(e) => setFechaVencimiento(e.target.value)}
-          />
+          <div>
+            <label>Fecha de vencimiento</label>
+            <input
+              type="date"
+              value={fechaVencimiento}
+              onChange={(e) => setFechaVencimiento(e.target.value)}
+            />
+          </div>
 
-          <FormInput
-            type="number"
-            label="📆 Duración en días"
-            placeholder="Ej: 7 días"
-            value={duracionDias ?? ""}
-            onChange={(e) => setDuracionDias(e.target.value ? Number(e.target.value) : null)}
-            min={1}
-          />
+          <div>
+            <label>Duración en días</label>
+            <input
+              type="number"
+              min={1}
+              value={duracionDias ?? ""}
+              onChange={(e) => setDuracionDias(e.target.value ? Number(e.target.value) : null)}
+            />
+          </div>
         </div>
 
         <div className="task-actions">
@@ -159,8 +218,23 @@ export function TaskCard({ task, onUpdate, onRequestDelete }: Props) {
   }
 
   return (
-    <div className={`task-card ${getEstadoVencimientoClass()}`}>
-      <h3>{task.nombre}</h3>
+    <div
+      ref={cardRef}
+      className={`task-card ${getEstadoVencimientoClass()} ${
+        isDragging ? "task-dragging" : ""
+      }`}
+      data-importancia={task.importancia}
+      draggable={!editando}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
+      <div className="task-drag-indicator">⋮⋮</div>
+
+      <h3>
+        {task.nombre}
+        {getPrioridadBadge()}
+      </h3>
+      
       <p>{task.descripcion}</p>
 
       <div className="task-metadata">

@@ -1,11 +1,12 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import api from "../../service/api";
 import { useToast } from "../../context/useToast";
 import { TaskCard } from "../../Components/TaskCard/TaskCard";
 import { TaskCreate } from "./TaskCreate/TaskCreate";
-import { TaskFilters, type FiltrosState } from "../../Components/TaskFilters/TaskFilters"; // 🔧 FIX 1
+import { TaskFilters, type FiltrosState } from "../../Components/TaskFilters/TaskFilters";
+import { DropZones } from "../../Components/DropZones/DropZones";
 import { Modal } from "../../Components/Modal/Modal";
 import { Button } from "../../Components/Button/Button";
 import { useAuth } from "../../auth/UserAuth";
@@ -25,7 +26,6 @@ const FILTROS_INICIALES: FiltrosState = {
   direccion: "ASC",
 };
 
-// 🔧 FIX 2: Tipo explícito para filtros del backend
 type FiltrosBackend = {
   busqueda?: string;
   estado?: string;
@@ -47,6 +47,11 @@ export function Task() {
   const [error, setError] = useState<string | null>(null);
   const [filtros, setFiltros] = useState<FiltrosState>(FILTROS_INICIALES);
   const [mostrarFiltros, setMostrarFiltros] = useState(false);
+  
+  const [draggedTask, setDraggedTask] = useState<TaskType | null>(null);
+  const [showDropZones, setShowDropZones] = useState(false);
+  
+  const dragTimeoutRef = useRef<number | null>(null);
 
   const { logout } = useAuth();
   const navigate = useNavigate();
@@ -57,8 +62,6 @@ export function Task() {
       setError(null);
 
       const filtrosActuales = filtrosAplicados || filtros;
-
-      // 🔧 FIX 2: Tipo explícito en lugar de any
       const filtrosBackend: FiltrosBackend = {};
 
       if (filtrosActuales.busqueda) {
@@ -90,7 +93,6 @@ export function Task() {
       const res = await api.post<TaskType[]>("/tareas/filtrar", filtrosBackend);
       setTasks(res.data);
     } catch {
-      // 🔧 FIX 3: Removido 'err' sin usar
       setError("❌ Error al cargar las tareas");
       showError("No se pudieron cargar las tareas");
     } finally {
@@ -98,13 +100,21 @@ export function Task() {
     }
   }, [filtros, showError]);
 
-  // 🔧 FIX 4: Agregado cargarTareas a las dependencias
   useEffect(() => {
     cargarTareas();
   }, [cargarTareas]);
 
-  const handleAplicarFiltros = () => {
-    cargarTareas(filtros);
+  useEffect(() => {
+    return () => {
+      if (dragTimeoutRef.current !== null) {
+        clearTimeout(dragTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleAplicarFiltros = (filtrosCustom?: FiltrosState) => {
+    const filtrosAUsar = filtrosCustom || filtros;
+    cargarTareas(filtrosAUsar);
     setMostrarFiltros(false);
   };
 
@@ -147,35 +157,87 @@ export function Task() {
     success("Sesión cerrada correctamente");
   };
 
+  const handleDragStart = (task: TaskType) => {
+    setDraggedTask(task);
+    
+    // 🔧 Usar window.setTimeout para devolver number
+    dragTimeoutRef.current = window.setTimeout(() => {
+      setShowDropZones(true);
+    }, 200);
+  };
+
+const handleDrop = async (nuevoEstado: string) => {
+  if (dragTimeoutRef.current !== null) {
+    clearTimeout(dragTimeoutRef.current);
+  }
+  
+  if (!draggedTask) return;
+
+  if (draggedTask.estado === nuevoEstado) {
+    setDraggedTask(null);
+    setShowDropZones(false);
+    return;
+  }
+
+  try {
+    await actualizarTarea(draggedTask.id, { 
+      ...draggedTask,
+      estado: nuevoEstado as TaskType["estado"] 
+    });
+    success(`Tarea movida a ${nuevoEstado.replace("_", " ")}`);
+  } catch {
+    showError("Error al actualizar el estado");
+  } finally {
+    setDraggedTask(null);
+    setShowDropZones(false);
+  }
+};
+
+  const handleDragLeave = () => {
+    if (dragTimeoutRef.current !== null) {
+      clearTimeout(dragTimeoutRef.current);
+    }
+    
+    setDraggedTask(null);
+    setShowDropZones(false);
+  };
+
+
   if (loading && tasks.length === 0) {
     return <div className="task-loading">⏳ Cargando...</div>;
   }
 
   return (
     <div className="task-container">
+      {showDropZones && (
+        <DropZones onDrop={handleDrop} onDragLeave={handleDragLeave} />
+      )}
+
       <div className="task-content">
         <header className="task-header">
           <h1>📋 Mis tareas</h1>
-          <Button variant="primary" onClick={() => navigate("/dashboard")}>
-            📊 Dashboard
-          </Button>
-          <Button variant="secondary" onClick={handleLogout}>
-            🚪 Salir
-          </Button>
+          <div className="task-header-actions">
+            <Button variant="primary" onClick={() => navigate("/dashboard")}>
+              📊 Dashboard
+            </Button>
+            <Button variant="secondary" onClick={handleLogout}>
+              🚪 Salir
+            </Button>
+          </div>
         </header>
 
         {error && <div className="task-error">{error}</div>}
 
         <TaskCreate onTaskCreated={() => cargarTareas(filtros)} />
 
-        <TaskFilters
-          filtros={filtros}
-          onFiltrosChange={setFiltros}
-          onAplicar={handleAplicarFiltros}
-          onLimpiar={handleLimpiarFiltros}
-          mostrarFiltros={mostrarFiltros}
-          onToggleFiltros={() => setMostrarFiltros(!mostrarFiltros)}
-        />
+      <TaskFilters
+        filtros={filtros}
+        onFiltrosChange={setFiltros}
+        onAplicar={handleAplicarFiltros}
+        onLimpiar={handleLimpiarFiltros}
+        mostrarFiltros={mostrarFiltros}
+        onToggleFiltros={() => setMostrarFiltros(!mostrarFiltros)}
+      />
 
         {loading && (
           <div className="task-loading-overlay">
@@ -183,22 +245,54 @@ export function Task() {
           </div>
         )}
 
-        {!loading && tasks.length === 0 ? (
-          <div className="task-empty">
-            <p>📭 No se encontraron tareas</p>
-            <p className="task-empty-sub">
-              {filtros.busqueda || filtros.estado || filtros.importancia
-                ? "Intenta ajustar los filtros"
-                : "Crea tu primera tarea para comenzar"}
-            </p>
-          </div>
-        ) : (
-          <div className="task-results-info">
-            <p>
-              📊 Mostrando <strong>{tasks.length}</strong> tarea{tasks.length !== 1 ? "s" : ""}
-            </p>
-          </div>
-        )}
+          {!loading && tasks.length === 0 ? (
+            <div className="task-empty">
+              <p>📭 No se encontraron tareas</p>
+              <p className="task-empty-sub">
+                {filtros.busqueda || filtros.estado || filtros.importancia
+                  ? "Intenta ajustar los filtros"
+                  : "Crea tu primera tarea para comenzar"}
+              </p>
+            </div>
+          ) : (
+            <div className="task-results-info">
+              {/* 🆕 Indicador mejorado */}
+              <div 
+                className="task-sort-indicator" 
+                data-type={!filtros.ordenarPor ? "intelligent" : "custom"}
+              >
+                {!filtros.ordenarPor ? (
+                  <>
+                    <span>🧠</span>
+                    <span>
+                      <strong>Ordenamiento inteligente</strong> - Prioriza tareas vencidas y urgentes
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span>🔄</span>
+                    <span>
+                      Ordenado por:{" "}
+                      <strong>
+                        {filtros.ordenarPor === "fechaVencimiento" && "Fecha de vencimiento"}
+                        {filtros.ordenarPor === "fechaCreacion" && "Fecha de creación"}
+                        {filtros.ordenarPor === "importancia" && "Importancia"}
+                        {filtros.ordenarPor === "nombre" && "Nombre"}
+                      </strong>
+                      {" "}
+                      <span style={{ opacity: 0.7 }}>
+                        ({filtros.direccion === "ASC" ? "↑ Ascendente" : "↓ Descendente"})
+                      </span>
+                    </span>
+                  </>
+                )}
+              </div>
+              
+              <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-secondary)', marginTop: 'var(--spacing-sm)' }}>
+                📊 Mostrando <strong>{tasks.length}</strong> tarea{tasks.length !== 1 ? "s" : ""}
+              </p>
+            </div>
+          )}
 
         {tasks.map((task) => (
           <TaskCard
@@ -206,6 +300,7 @@ export function Task() {
             task={task}
             onUpdate={actualizarTarea}
             onRequestDelete={setTaskToDelete}
+            onDragStart={handleDragStart}
           />
         ))}
 

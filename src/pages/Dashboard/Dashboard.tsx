@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react"; // 🔧 Agregar useCallback
 import { useNavigate } from "react-router-dom";
 import api from "../../service/api";
 import { useToast } from "../../context/useToast";
@@ -15,11 +15,8 @@ export function Dashboard() {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    cargarEstadisticas();
-  }, []);
-
-  const cargarEstadisticas = async () => {
+  // 🔧 Mover cargarEstadisticas fuera del useEffect y usar useCallback
+  const cargarEstadisticas = useCallback(async () => {
     try {
       setLoading(true);
       const res = await api.get<Estadisticas>("/tareas/estadisticas");
@@ -29,7 +26,11 @@ export function Dashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [showError]);
+
+  useEffect(() => {
+    cargarEstadisticas();
+  }, [cargarEstadisticas]); // 🔧 Agregar dependencia
 
   const handleLogout = () => {
     logout();
@@ -125,7 +126,7 @@ export function Dashboard() {
           />
         </div>
 
-        {/* Gráficos (simplificados sin librerías) */}
+        {/* Gráficos */}
         <div className="dashboard-charts">
           {/* Distribución por estado */}
           <div className="dashboard-chart-card">
