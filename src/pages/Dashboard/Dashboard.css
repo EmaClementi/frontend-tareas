@@ -22,10 +22,11 @@
 }
 
 .spinner {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--bg-card);
   padding: var(--spacing-3xl) var(--spacing-4xl);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-semibold);
   color: var(--primary);
@@ -49,7 +50,8 @@
 }
 
 .dashboard-subtitle {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-white);
+  opacity: 0.9;
   margin: var(--spacing-sm) 0 0 0;
   font-size: var(--font-size-md);
 }
@@ -81,8 +83,8 @@
   border-radius: var(--radius-md);
   padding: var(--spacing-2xl);
   box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-base), 
-              box-shadow var(--transition-base);
+  transition: transform var(--transition-base),
+    box-shadow var(--transition-base);
 }
 
 .dashboard-chart-card:hover {

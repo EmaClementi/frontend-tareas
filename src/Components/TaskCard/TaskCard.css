@@ -6,8 +6,8 @@
   padding: var(--spacing-2xl);
   margin-bottom: var(--spacing-lg);
   box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-base), 
-              box-shadow var(--transition-base);
+  transition: transform var(--transition-base),
+    box-shadow var(--transition-base);
   border-left: 4px solid var(--border-light);
   cursor: grab;
 }
@@ -53,10 +53,11 @@
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   color: var(--text-heading);
-  padding-right: var(--spacing-3xl); /* Espacio para el drag indicator */
+  padding-right: var(--spacing-3xl);
+  /* Espacio para el drag indicator */
 }
 
-.task-card > p {
+.task-card>p {
   margin: 0 0 var(--spacing-lg) 0;
   font-size: var(--font-size-base);
   color: var(--text-secondary);
@@ -134,14 +135,49 @@
 }
 
 /* ========== ESTADOS DE VENCIMIENTO ========== */
+.task-card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xs);
+}
+
+.task-card-title {
+  margin: 0;
+  flex: 1;
+}
+
+.task-quick-complete {
+  background: transparent;
+  border: 2px solid var(--border-light);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all var(--transition-base);
+  opacity: 0.6;
+}
+
+.task-quick-complete:hover {
+  background: var(--bg-tertiary);
+  opacity: 1;
+  border-color: var(--importancia-baja);
+  transform: scale(1.1);
+}
+
 .task-card.task-vencida {
   border-left: 4px solid var(--importancia-alta);
-  background: linear-gradient(135deg, var(--bg-card) 0%, #fef2f2 100%);
+  background: var(--vencida-bg);
 }
 
 .task-card.task-proxima-vencer {
   border-left: 4px solid var(--importancia-media);
-  background: linear-gradient(135deg, var(--bg-card) 0%, #fffbeb 100%);
+  background: var(--hoy-bg);
 }
 
 /* ========== IMPORTANCIA (BORDE LATERAL) ========== */
@@ -159,10 +195,13 @@
 
 /* ========== ANIMACIÓN PULSO ========== */
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
     opacity: 1;
   }
+
   50% {
     transform: scale(1.02);
     opacity: 0.9;
@@ -190,8 +229,8 @@
   font-size: var(--font-size-base);
   margin-bottom: var(--spacing-md);
   font-family: inherit;
-  transition: border-color var(--transition-base), 
-              box-shadow var(--transition-base);
+  transition: border-color var(--transition-base),
+    box-shadow var(--transition-base);
   box-sizing: border-box;
 }
 
@@ -220,7 +259,7 @@
   border: 2px solid var(--border-dashed);
 }
 
-.task-dates-edit > div {
+.task-dates-edit>div {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
@@ -245,6 +284,37 @@
   flex-wrap: wrap;
 }
 
+/* ========== COMPLETION EFFECTS ========== */
+.task-card.task-completada {
+  opacity: 0.8;
+  filter: grayscale(0.5);
+  transition: all var(--transition-base);
+}
+
+.task-card.task-completada .task-card-title {
+  text-decoration: line-through;
+  color: var(--text-tertiary);
+  transition: all var(--transition-base);
+}
+
+@keyframes task-pop {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.02);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.task-card-completing {
+  animation: task-pop 0.4s ease-out;
+}
+
 /* ========== RESPONSIVE ========== */
 @media (max-width: 640px) {
   .task-card {
@@ -267,6 +337,7 @@
     grid-template-columns: 1fr;
   }
 }
+
 /* ========== BADGES DE PRIORIDAD ========== */
 .task-priority-badge {
   display: inline-flex;

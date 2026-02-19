@@ -5,6 +5,7 @@ type Props = {
   onClick?: () => void;
   type?: "button" | "submit";
   variant?: "primary" | "secondary" | "danger";
+  size?: "sm" | "md" | "lg";
   disabled?: boolean;
 };
 
@@ -13,12 +14,13 @@ export function Button({
   onClick,
   type = "button",
   variant = "primary",
+  size = "md",
 }: Props) {
   return (
     <button
       type={type}
       onClick={onClick}
-      className={`btn btn-${variant}`}
+      className={`btn btn-${variant} btn-${size}`}
     >
       {children}
     </button>

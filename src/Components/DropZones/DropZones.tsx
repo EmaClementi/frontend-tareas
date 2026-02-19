@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import "./DropZones.css";
 
 type Props = {
@@ -6,7 +7,7 @@ type Props = {
   onDragLeave: () => void;
 };
 
-export function DropZones({ onDrop }: Props) { // 🔧 Removido onDragLeave de destructuring
+export function DropZones({ onDrop }: Props) {
   const [hoverZone, setHoverZone] = useState<string | null>(null);
 
   const zonas = [
@@ -50,18 +51,17 @@ export function DropZones({ onDrop }: Props) { // 🔧 Removido onDragLeave de d
     }
   };
 
-  return (
-    <div 
-      className="drop-zones-overlay" 
+  return createPortal(
+    <div
+      className="drop-zones-overlay"
       onDragLeave={handleDragLeave}
     >
       <div className="drop-zones-container">
         {zonas.map((zona) => (
           <div
             key={zona.estado}
-            className={`drop-zone drop-zone-${zona.color} ${
-              hoverZone === zona.estado ? "drop-zone-hover" : ""
-            }`}
+            className={`drop-zone drop-zone-${zona.color} ${hoverZone === zona.estado ? "drop-zone-hover" : ""
+              }`}
             onDragOver={(e) => handleDragOver(e, zona.estado)}
             onDragLeave={() => setHoverZone(null)}
             onDrop={(e) => handleDrop(e, zona.estado)}
@@ -77,6 +77,7 @@ export function DropZones({ onDrop }: Props) { // 🔧 Removido onDragLeave de d
           </div>
         ))}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

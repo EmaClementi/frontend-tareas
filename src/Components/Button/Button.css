@@ -24,6 +24,23 @@
   transform: translateY(0);
 }
 
+/* SIZES */
+.btn-sm {
+  padding: 0.4rem 0.8rem;
+  font-size: var(--font-size-sm);
+}
+
+.btn-md {
+  padding: 0.75rem 1.5rem;
+  font-size: var(--font-size-base);
+}
+
+.btn-lg {
+  padding: 1rem 2rem;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+}
+
 .btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;

@@ -6,8 +6,9 @@
   margin-bottom: var(--spacing-2xl);
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
   box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
 }
 
 .task-create h2 {
@@ -19,20 +20,24 @@
 
 /* ========== INPUTS ========== */
 .task-create input[type="text"],
+.task-create input[type="date"],
+.task-create input[type="number"],
 .task-create textarea,
 .task-create select {
   width: 100%;
   padding: var(--spacing-md);
   border-radius: var(--radius-sm);
   border: 2px solid var(--border-light);
+  background-color: var(--bg-input);
+  color: var(--text-primary);
   font-size: var(--font-size-base);
   font-family: inherit;
-  transition: border-color var(--transition-base), 
-              box-shadow var(--transition-base);
+  transition: border-color var(--transition-base),
+    box-shadow var(--transition-base);
   box-sizing: border-box;
 }
 
-.task-create input[type="text"]:focus,
+.task-create input:focus,
 .task-create textarea:focus,
 .task-create select:focus {
   outline: none;
@@ -46,11 +51,11 @@
   max-height: 200px;
 }
 
-/* ========== SECCIÓN DE FECHAS ========== */
-.task-dates-section {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-lg);
+/* ========== SECCIÓN DE FECHAS (GRID) ========== */
+.task-dates-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-sm);
   padding: var(--spacing-xl);
   background: var(--bg-tertiary);
   border-radius: var(--radius-sm);
@@ -58,21 +63,33 @@
   margin: var(--spacing-sm) 0;
 }
 
+.task-date-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.task-date-field label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 /* ========== DIVISOR "O" ========== */
 .task-date-divider {
   text-align: center;
   position: relative;
-  margin: var(--spacing-md) 0;
+  margin: var(--spacing-sm) 0;
 }
 
 .task-date-divider span {
   background: var(--bg-tertiary);
   padding: 0 var(--spacing-md);
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-sm);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-size: var(--font-size-xs);
   position: relative;
   z-index: 1;
 }
@@ -83,14 +100,8 @@
   top: 50%;
   left: 0;
   right: 0;
-  height: 2px;
-  background: linear-gradient(
-    90deg, 
-    transparent, 
-    var(--border-dashed) 20%, 
-    var(--border-dashed) 80%, 
-    transparent
-  );
+  height: 1px;
+  background: var(--border-dashed);
   z-index: 0;
 }
 
@@ -103,7 +114,16 @@
 
 /* ========== RESPONSIVE ========== */
 @media (min-width: 640px) {
-  .task-dates-section {
-    padding: var(--spacing-2xl);
+  .task-dates-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: var(--spacing-xl);
+  }
+
+  .task-date-divider {
+    grid-column: span 2;
+  }
+
+  .task-date-field:last-child {
+    grid-column: span 2;
   }
 }

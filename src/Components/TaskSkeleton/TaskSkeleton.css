@@ -1,0 +1,54 @@
+.task-skeleton-card {
+    background: var(--bg-card);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+    border: 1px solid var(--border-light);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.task-skeleton-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.skeleton-title {
+    height: 24px;
+    width: 60%;
+}
+
+.skeleton-icon {
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+}
+
+.task-skeleton-meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.skeleton-text {
+    height: 14px;
+    width: 100%;
+}
+
+.skeleton-text.short {
+    width: 40%;
+}
+
+.task-skeleton-footer {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-xs);
+}
+
+.skeleton-badge {
+    height: 28px;
+    width: 80px;
+    border-radius: var(--radius-full);
+}

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://tareas-2-i3b4.onrender.com",
+  baseURL: "http://localhost:8080",
 });
 
 // Interceptor de REQUEST - Agregar token automáticamente
@@ -20,7 +20,7 @@ api.interceptors.request.use(
   }
 );
 
-// 🆕 Interceptor de RESPONSE - Manejar errores globalmente
+// Interceptor de RESPONSE - Manejar errores globalmente
 api.interceptors.response.use(
   (response) => {
     // Si la respuesta es exitosa, simplemente la retornamos
@@ -31,7 +31,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       // Token inválido o expirado
       localStorage.removeItem("token");
-      
+
       // Redirigir al login solo si no estamos ya ahí
       if (window.location.pathname !== "/login") {
         window.location.href = "/login";
@@ -51,7 +51,5 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-export const eliminarTarea = (id: number) => api.delete(`/tareas/${id}`);
 
 export default api;

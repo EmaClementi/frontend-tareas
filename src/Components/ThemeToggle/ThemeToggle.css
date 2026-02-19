@@ -1,0 +1,28 @@
+.theme-toggle {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-full);
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+
+.theme-toggle:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--primary);
+}
+
+.toggle-icon {
+    font-size: 1.5rem;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

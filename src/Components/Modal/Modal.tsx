@@ -22,20 +22,20 @@ export function Modal({ open, title, children, onClose }: Props) {
   }, [open]);
 
   useEffect(() => {
-  const handleEsc = (e: KeyboardEvent) => {
-    if (e.key === "Escape") {
-      onClose();
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    if (open) {
+      window.addEventListener("keydown", handleEsc);
     }
-  };
 
-  if (open) {
-    window.addEventListener("keydown", handleEsc);
-  }
-
-  return () => {
-    window.removeEventListener("keydown", handleEsc);
-  };
-}, [open, onClose]);
+    return () => {
+      window.removeEventListener("keydown", handleEsc);
+    };
+  }, [open, onClose]);
 
 
   if (!open) return null;

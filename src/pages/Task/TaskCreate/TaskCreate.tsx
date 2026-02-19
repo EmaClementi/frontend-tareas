@@ -2,7 +2,7 @@ import { useState } from "react";
 import api from "../../../service/api";
 import { useToast } from "../../../context/useToast";
 import { Button } from "../../../Components/Button/Button";
-import { FormInput } from "../../../Components/FormImput/FormInput"; // 🆕
+import { FormInput } from "../../../Components/FormInput/FormInput";
 import "./TaskCreate.css";
 
 type TaskCreateProps = {
@@ -61,7 +61,7 @@ export function TaskCreate({ onTaskCreated }: TaskCreateProps) {
     <form className="task-create" onSubmit={handleSubmit}>
       <h2>➕ Nueva tarea</h2>
 
-      {/* 🆕 Usar FormInput */}
+
       <FormInput
         type="text"
         placeholder="Nombre de la tarea"
@@ -89,33 +89,39 @@ export function TaskCreate({ onTaskCreated }: TaskCreateProps) {
         ]}
       />
 
-      <div className="task-dates-section">
-        <FormInput
-          type="date"
-          label="📅 Fecha de inicio (opcional)"
-          value={fechaInicio}
-          onChange={(e) => setFechaInicio(e.target.value)}
-        />
+      <div className="task-dates-grid">
+        <div className="task-date-field">
+          <FormInput
+            type="date"
+            label="📅 Fecha de inicio (opcional)"
+            value={fechaInicio}
+            onChange={(e) => setFechaInicio(e.target.value)}
+          />
+        </div>
 
-        <FormInput
-          type="date"
-          label="⏰ Fecha de vencimiento"
-          value={fechaVencimiento}
-          onChange={(e) => setFechaVencimiento(e.target.value)}
-        />
+        <div className="task-date-field">
+          <FormInput
+            type="date"
+            label="⏰ Fecha de vencimiento"
+            value={fechaVencimiento}
+            onChange={(e) => setFechaVencimiento(e.target.value)}
+          />
+        </div>
 
         <div className="task-date-divider">
           <span>O</span>
         </div>
 
-        <FormInput
-          type="number"
-          label="📆 Duración en días"
-          placeholder="Ej: 7 días"
-          value={duracionDias}
-          onChange={(e) => setDuracionDias(e.target.value ? Number(e.target.value) : "")}
-          min={1}
-        />
+        <div className="task-date-field">
+          <FormInput
+            type="number"
+            label="📆 Duración en días"
+            placeholder="Ej: 7 días"
+            value={duracionDias}
+            onChange={(e) => setDuracionDias(e.target.value ? Number(e.target.value) : "")}
+            min={1}
+          />
+        </div>
       </div>
 
       <Button type="submit" variant="primary" disabled={loading || !nombre.trim()}>

@@ -1,39 +1,42 @@
 .form-input-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  margin-bottom: 1rem;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-md);
 }
 
 .form-input-label {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #4b5563;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: var(--spacing-sm);
 }
 
 .form-input {
   width: 100%;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  border: 2px solid #e5e7eb;
-  border-radius: 8px;
-  font-size: 0.95rem;
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  border: 2px solid var(--border-light);
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-base);
   box-sizing: border-box;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: border-color var(--transition-base),
+    box-shadow var(--transition-base);
   font-family: inherit;
 }
 
 .form-input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--border-focus);
+  box-shadow: var(--shadow-focus);
 }
 
 .form-input::placeholder {
-  color: #9ca3af;
+  color: var(--text-tertiary);
 }
 
 /* Para textarea */
@@ -46,8 +49,7 @@ textarea.form-input {
 /* Para select */
 select.form-input {
   cursor: pointer;
-  background-color: #ffffff;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234b5563' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   padding-right: 2.5rem;
@@ -68,6 +70,8 @@ select.form-input {
 /* Para date inputs */
 .form-input[type="date"] {
   cursor: pointer;
+  color-scheme: light dark;
+  /* Permite que el selector de fecha del navegador se adapte al tema */
 }
 
 /* Cuando está dentro del wrapper, no agregar margin-bottom extra */

@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import { PrivateRoute } from "./routes/PrivateRoute";
 import { PublicRoute } from "./routes/PublicRoute";
 import { Home } from "./pages/Home/Home";
@@ -8,10 +9,12 @@ import { Task } from "./pages/Task/TaskList";
 import { Dashboard } from "./pages/Dashboard/Dashboard";
 import './styles/variables.css'
 
-export function App() {
+function AppRoutes() {
+  const location = useLocation();
+
   return (
-    <BrowserRouter>
-      <Routes>
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
         <Route path="/" element={<Home />} />
 
         <Route
@@ -50,6 +53,14 @@ export function App() {
           }
         />
       </Routes>
+    </AnimatePresence>
+  );
+}
+
+export function App() {
+  return (
+    <BrowserRouter>
+      <AppRoutes />
     </BrowserRouter>
   );
 }

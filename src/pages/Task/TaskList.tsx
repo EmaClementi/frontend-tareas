@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 
 import api from "../../service/api";
 import { useToast } from "../../context/useToast";
@@ -9,6 +10,10 @@ import { TaskFilters, type FiltrosState } from "../../Components/TaskFilters/Tas
 import { DropZones } from "../../Components/DropZones/DropZones";
 import { Modal } from "../../Components/Modal/Modal";
 import { Button } from "../../Components/Button/Button";
+import { ThemeToggle } from "../../Components/ThemeToggle/ThemeToggle";
+import { AnimatedPage } from "../../Components/AnimatedPage";
+import { TaskSkeleton } from "../../Components/TaskSkeleton/TaskSkeleton";
+import { EmptyState } from "../../Components/EmptyState/EmptyState";
 import { useAuth } from "../../auth/UserAuth";
 import type TaskType from "../../types/Task";
 
@@ -47,10 +52,11 @@ export function Task() {
   const [error, setError] = useState<string | null>(null);
   const [filtros, setFiltros] = useState<FiltrosState>(FILTROS_INICIALES);
   const [mostrarFiltros, setMostrarFiltros] = useState(false);
-  
+
   const [draggedTask, setDraggedTask] = useState<TaskType | null>(null);
   const [showDropZones, setShowDropZones] = useState(false);
-  
+  const [showForm, setShowForm] = useState(false);
+
   const dragTimeoutRef = useRef<number | null>(null);
 
   const { logout } = useAuth();
@@ -159,106 +165,138 @@ export function Task() {
 
   const handleDragStart = (task: TaskType) => {
     setDraggedTask(task);
-    
-    // 🔧 Usar window.setTimeout para devolver number
+
     dragTimeoutRef.current = window.setTimeout(() => {
       setShowDropZones(true);
     }, 200);
   };
 
-const handleDrop = async (nuevoEstado: string) => {
-  if (dragTimeoutRef.current !== null) {
-    clearTimeout(dragTimeoutRef.current);
-  }
-  
-  if (!draggedTask) return;
+  const handleDrop = async (nuevoEstado: string) => {
+    if (dragTimeoutRef.current !== null) {
+      clearTimeout(dragTimeoutRef.current);
+    }
 
-  if (draggedTask.estado === nuevoEstado) {
-    setDraggedTask(null);
-    setShowDropZones(false);
-    return;
-  }
+    if (!draggedTask) return;
 
-  try {
-    await actualizarTarea(draggedTask.id, { 
-      ...draggedTask,
-      estado: nuevoEstado as TaskType["estado"] 
-    });
-    success(`Tarea movida a ${nuevoEstado.replace("_", " ")}`);
-  } catch {
-    showError("Error al actualizar el estado");
-  } finally {
-    setDraggedTask(null);
-    setShowDropZones(false);
-  }
-};
+    if (draggedTask.estado === nuevoEstado) {
+      setDraggedTask(null);
+      setShowDropZones(false);
+      return;
+    }
+
+    try {
+      await actualizarTarea(draggedTask.id, {
+        ...draggedTask,
+        estado: nuevoEstado as TaskType["estado"]
+      });
+      success(`Tarea movida a ${nuevoEstado.replace("_", " ")}`);
+    } catch {
+      showError("Error al actualizar el estado");
+    } finally {
+      setDraggedTask(null);
+      setShowDropZones(false);
+    }
+  };
 
   const handleDragLeave = () => {
     if (dragTimeoutRef.current !== null) {
       clearTimeout(dragTimeoutRef.current);
     }
-    
+
     setDraggedTask(null);
     setShowDropZones(false);
   };
 
 
   if (loading && tasks.length === 0) {
-    return <div className="task-loading">⏳ Cargando...</div>;
+    return (
+      <AnimatedPage>
+        <div className="task-container">
+          <div className="task-content">
+            <header className="task-header">
+              <div className="skeleton skeleton-title" style={{ width: '200px', height: '32px' }}></div>
+            </header>
+            <div style={{ marginTop: '2rem' }}>
+              <TaskSkeleton />
+              <TaskSkeleton />
+              <TaskSkeleton />
+            </div>
+          </div>
+        </div>
+      </AnimatedPage>
+    );
   }
 
   return (
-    <div className="task-container">
-      {showDropZones && (
-        <DropZones onDrop={handleDrop} onDragLeave={handleDragLeave} />
-      )}
-
-      <div className="task-content">
-        <header className="task-header">
-          <h1>📋 Mis tareas</h1>
-          <div className="task-header-actions">
-            <Button variant="primary" onClick={() => navigate("/dashboard")}>
-              📊 Dashboard
-            </Button>
-            <Button variant="secondary" onClick={handleLogout}>
-              🚪 Salir
-            </Button>
-          </div>
-        </header>
-
-        {error && <div className="task-error">{error}</div>}
-
-        <TaskCreate onTaskCreated={() => cargarTareas(filtros)} />
-
-      <TaskFilters
-        filtros={filtros}
-        onFiltrosChange={setFiltros}
-        onAplicar={handleAplicarFiltros}
-        onLimpiar={handleLimpiarFiltros}
-        mostrarFiltros={mostrarFiltros}
-        onToggleFiltros={() => setMostrarFiltros(!mostrarFiltros)}
-      />
-
-        {loading && (
-          <div className="task-loading-overlay">
-            <div className="task-spinner">⏳ Filtrando...</div>
-          </div>
+    <AnimatedPage>
+      <div className="task-container">
+        {showDropZones && (
+          <DropZones onDrop={handleDrop} onDragLeave={handleDragLeave} />
         )}
 
-          {!loading && tasks.length === 0 ? (
-            <div className="task-empty">
-              <p>📭 No se encontraron tareas</p>
-              <p className="task-empty-sub">
-                {filtros.busqueda || filtros.estado || filtros.importancia
-                  ? "Intenta ajustar los filtros"
-                  : "Crea tu primera tarea para comenzar"}
-              </p>
+        <div className="task-content">
+          <header className="task-header">
+            <h1>📋 Mis tareas</h1>
+            <div className="task-header-actions">
+              <ThemeToggle />
+              <Button variant="primary" onClick={() => navigate("/dashboard")}>
+                📊 Dashboard
+              </Button>
+              <Button variant="secondary" onClick={handleLogout}>
+                🚪 Salir
+              </Button>
             </div>
+          </header>
+
+          {error && <div className="task-error">{error}</div>}
+
+          <TaskFilters
+            filtros={filtros}
+            onFiltrosChange={setFiltros}
+            onAplicar={handleAplicarFiltros}
+            onLimpiar={handleLimpiarFiltros}
+            mostrarFiltros={mostrarFiltros}
+            onToggleFiltros={() => setMostrarFiltros(!mostrarFiltros)}
+          />
+
+          <div className="task-form-section">
+            <button
+              className={`task-form-toggle ${showForm ? "task-form-toggle-open" : ""}`}
+              onClick={() => setShowForm(!showForm)}
+              type="button"
+            >
+              <span className="task-form-toggle-icon">{showForm ? "−" : "+"}</span>
+              <span>{showForm ? "Cerrar formulario" : "Nueva tarea"}</span>
+            </button>
+
+            {showForm && (
+              <div className="task-form-collapsible">
+                <TaskCreate onTaskCreated={() => {
+                  cargarTareas(filtros);
+                  setShowForm(false);
+                }} />
+              </div>
+            )}
+          </div>
+
+          {loading && (
+            <div className="task-loading-overlay">
+              <div className="task-spinner">⏳ Filtrando...</div>
+            </div>
+          )}
+
+          {!loading && tasks.length === 0 ? (
+            <EmptyState
+              title="¡Todo despejado por aquí!"
+              subtitle={filtros.busqueda || filtros.estado || filtros.importancia
+                ? "Prueba ajustando los filtros para encontrar lo que buscas."
+                : "No tienes tareas pendientes. ¡Crea una nueva para empezar el día!"}
+              type={filtros.busqueda ? "search" : "tasks"}
+            />
           ) : (
             <div className="task-results-info">
-              {/* 🆕 Indicador mejorado */}
-              <div 
-                className="task-sort-indicator" 
+              <div
+                className="task-sort-indicator"
                 data-type={!filtros.ordenarPor ? "intelligent" : "custom"}
               >
                 {!filtros.ordenarPor ? (
@@ -287,48 +325,52 @@ const handleDrop = async (nuevoEstado: string) => {
                   </>
                 )}
               </div>
-              
+
               <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-secondary)', marginTop: 'var(--spacing-sm)' }}>
                 📊 Mostrando <strong>{tasks.length}</strong> tarea{tasks.length !== 1 ? "s" : ""}
               </p>
             </div>
           )}
 
-        {tasks.map((task) => (
-          <TaskCard
-            key={task.id}
-            task={task}
-            onUpdate={actualizarTarea}
-            onRequestDelete={setTaskToDelete}
-            onDragStart={handleDragStart}
-          />
-        ))}
+          <AnimatePresence initial={false}>
+            {tasks.map((task) => (
+              <TaskCard
+                key={task.id}
+                task={task}
+                onUpdate={actualizarTarea}
+                onRequestDelete={setTaskToDelete}
+                onDragStart={handleDragStart}
+                onDragEnd={() => setShowDropZones(false)}
+              />
+            ))}
+          </AnimatePresence>
 
-        <Modal
-          open={!!taskToDelete}
-          title="Eliminar tarea"
-          onClose={() => setTaskToDelete(null)}
-        >
-          <p>
-            ¿Seguro que querés eliminar la tarea
-            <strong> {taskToDelete?.nombre}</strong>?
-          </p>
+          <Modal
+            open={!!taskToDelete}
+            title="Eliminar tarea"
+            onClose={() => setTaskToDelete(null)}
+          >
+            <p>
+              ¿Seguro que querés eliminar la tarea
+              <strong> {taskToDelete?.nombre}</strong>?
+            </p>
 
-          <div className="task-actions">
-            <Button
-              variant="danger"
-              disabled={loadingDelete}
-              onClick={eliminarTarea}
-            >
-              {loadingDelete ? "Eliminando..." : "Sí, eliminar"}
-            </Button>
+            <div className="task-actions">
+              <Button
+                variant="danger"
+                disabled={loadingDelete}
+                onClick={eliminarTarea}
+              >
+                {loadingDelete ? "Eliminando..." : "Sí, eliminar"}
+              </Button>
 
-            <Button variant="secondary" onClick={() => setTaskToDelete(null)}>
-              Cancelar
-            </Button>
-          </div>
-        </Modal>
+              <Button variant="secondary" onClick={() => setTaskToDelete(null)}>
+                Cancelar
+              </Button>
+            </div>
+          </Modal>
+        </div>
       </div>
-    </div>
+    </AnimatedPage>
   );
 }

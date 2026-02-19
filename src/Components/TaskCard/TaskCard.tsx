@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { motion } from "framer-motion";
 import type Task from "../../types/Task";
 import "./TaskCard.css";
 import { Button } from "../Button/Button";
@@ -8,9 +9,10 @@ type Props = {
   onUpdate: (id: number, data: Partial<Task>) => void;
   onRequestDelete: (task: Task) => void;
   onDragStart?: (task: Task) => void;
+  onDragEnd?: () => void;
 };
 
-export function TaskCard({ task, onUpdate, onRequestDelete, onDragStart }: Props) {
+export function TaskCard({ task, onUpdate, onRequestDelete, onDragStart, onDragEnd }: Props) {
   const [editando, setEditando] = useState(false);
   const [nombre, setNombre] = useState(task.nombre);
   const [descripcion, setDescripcion] = useState(task.descripcion);
@@ -20,7 +22,7 @@ export function TaskCard({ task, onUpdate, onRequestDelete, onDragStart }: Props
   const [fechaInicio, setFechaInicio] = useState(task.fechaInicio || "");
   const [fechaVencimiento, setFechaVencimiento] = useState(task.fechaVencimiento || "");
   const [isDragging, setIsDragging] = useState(false);
-  
+
   const cardRef = useRef<HTMLDivElement>(null);
 
   if (
@@ -82,7 +84,7 @@ export function TaskCard({ task, onUpdate, onRequestDelete, onDragStart }: Props
   const handleDragStart = (e: React.DragEvent) => {
     setIsDragging(true);
     e.dataTransfer.effectAllowed = "move";
-    
+
     if (cardRef.current) {
       const clone = cardRef.current.cloneNode(true) as HTMLElement;
       clone.style.position = "absolute";
@@ -92,10 +94,10 @@ export function TaskCard({ task, onUpdate, onRequestDelete, onDragStart }: Props
       clone.style.transform = "rotate(3deg)";
       document.body.appendChild(clone);
       e.dataTransfer.setDragImage(clone, 0, 0);
-      
+
       setTimeout(() => document.body.removeChild(clone), 0);
     }
-    
+
     if (onDragStart) {
       onDragStart(task);
     }
@@ -103,45 +105,70 @@ export function TaskCard({ task, onUpdate, onRequestDelete, onDragStart }: Props
 
   const handleDragEnd = () => {
     setIsDragging(false);
+    if (onDragEnd) {
+      onDragEnd();
+    }
   };
 
   const getPrioridadBadge = () => {
-  const hoy = new Date().toISOString().split('T')[0];
-  
-  if (task.estado === "COMPLETADA" || task.estado === "CANCELADA") {
+    const hoy = new Date().toISOString().split('T')[0];
+
+    if (task.estado === "COMPLETADA" || task.estado === "CANCELADA") {
+      return null;
+    }
+
+    if (task.estaVencida) {
+      return (
+        <span className="task-priority-badge priority-critical">
+          🔴 URGENTE - Vencida
+        </span>
+      );
+    }
+
+    if (task.fechaVencimiento === hoy) {
+      return (
+        <span className="task-priority-badge priority-high">
+          🔥 VENCE HOY
+        </span>
+      );
+    }
+
+    if (task.importancia === "ALTA" && task.diasRestantes && task.diasRestantes <= 3) {
+      return (
+        <span className="task-priority-badge priority-warning">
+          ⚠️ Alta prioridad
+        </span>
+      );
+    }
+
     return null;
-  }
-  
-  if (task.estaVencida) {
-    return (
-      <span className="task-priority-badge priority-critical">
-        🔴 URGENTE - Vencida
-      </span>
-    );
-  }
-  
-  if (task.fechaVencimiento === hoy) {
-    return (
-      <span className="task-priority-badge priority-high">
-        🔥 VENCE HOY
-      </span>
-    );
-  }
-  
-  if (task.importancia === "ALTA" && task.diasRestantes && task.diasRestantes <= 3) {
-    return (
-      <span className="task-priority-badge priority-warning">
-        ⚠️ Alta prioridad
-      </span>
-    );
-  }
-  
-  return null;
-};
+  };
+
+  const [isCompleting, setIsCompleting] = useState(false);
+
+  const handleQuickComplete = () => {
+    if (task.estado === "COMPLETADA") return;
+
+    setIsCompleting(true);
+    setTimeout(() => {
+      onUpdate(task.id, {
+        ...task,
+        estado: "COMPLETADA"
+      });
+      setIsCompleting(false);
+    }, 400);
+  };
 
   if (editando) {
     return (
-      <form className="task-card task-card-editing" onSubmit={handleSubmit}>
+      <motion.form
+        layout
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        className="task-card task-card-editing"
+        onSubmit={handleSubmit}
+      >
         <h3>✏️ Editando tarea</h3>
 
         <input
@@ -159,21 +186,23 @@ export function TaskCard({ task, onUpdate, onRequestDelete, onDragStart }: Props
           rows={3}
         />
 
-        <select
-          value={importancia}
-          onChange={(e) => setImportancia(e.target.value as "BAJA" | "MEDIA" | "ALTA")}
-        >
-          <option value="BAJA">Baja</option>
-          <option value="MEDIA">Media</option>
-          <option value="ALTA">Alta</option>
-        </select>
+        <div className="task-row">
+          <select
+            value={importancia}
+            onChange={(e) => setImportancia(e.target.value as "BAJA" | "MEDIA" | "ALTA")}
+          >
+            <option value="BAJA">Baja</option>
+            <option value="MEDIA">Media</option>
+            <option value="ALTA">Alta</option>
+          </select>
 
-        <select value={estado} onChange={(e) => setEstado(e.target.value as Task["estado"])}>
-          <option value="PENDIENTE">Pendiente</option>
-          <option value="EN_PROGRESO">En Progreso</option>
-          <option value="COMPLETADA">Completada</option>
-          <option value="CANCELADA">Cancelada</option>
-        </select>
+          <select value={estado} onChange={(e) => setEstado(e.target.value as Task["estado"])}>
+            <option value="PENDIENTE">Pendiente</option>
+            <option value="EN_PROGRESO">En Progreso</option>
+            <option value="COMPLETADA">Completada</option>
+            <option value="CANCELADA">Cancelada</option>
+          </select>
+        </div>
 
         <div className="task-dates-edit">
           <div>
@@ -213,28 +242,43 @@ export function TaskCard({ task, onUpdate, onRequestDelete, onDragStart }: Props
             ❌ Cancelar
           </Button>
         </div>
-      </form>
+      </motion.form>
     );
   }
 
+
   return (
-    <div
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      whileHover={{ scale: 1.01, boxShadow: 'var(--shadow-md)' }}
       ref={cardRef}
-      className={`task-card ${getEstadoVencimientoClass()} ${
-        isDragging ? "task-dragging" : ""
-      }`}
+      className={`task-card ${getEstadoVencimientoClass()} ${isDragging ? "task-dragging" : ""} ${task.estado === "COMPLETADA" ? "task-completada" : ""} ${isCompleting ? "task-card-completing" : ""}`}
       data-importancia={task.importancia}
       draggable={!editando}
-      onDragStart={handleDragStart}
+      onDragStart={handleDragStart as any}
       onDragEnd={handleDragEnd}
     >
       <div className="task-drag-indicator">⋮⋮</div>
 
-      <h3>
-        {task.nombre}
-        {getPrioridadBadge()}
-      </h3>
-      
+      <div className="task-card-header-row">
+        <h3 className="task-card-title">
+          {task.nombre}
+          {getPrioridadBadge()}
+        </h3>
+        {task.estado !== "COMPLETADA" && task.estado !== "CANCELADA" && (
+          <button
+            className="task-quick-complete"
+            onClick={handleQuickComplete}
+            title="Marcar como completada"
+          >
+            ✅
+          </button>
+        )}
+      </div>
+
       <p>{task.descripcion}</p>
 
       <div className="task-metadata">
@@ -291,6 +335,6 @@ export function TaskCard({ task, onUpdate, onRequestDelete, onDragStart }: Props
           🗑 Eliminar
         </Button>
       </div>
-    </div>
+    </motion.div>
   );
 }

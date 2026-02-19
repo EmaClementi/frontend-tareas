@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "../Button/Button";
-import { FormInput } from "../FormImput/FormInput";
+import { FormInput } from "../FormInput/FormInput";
 import "./TaskFilters.css";
 
 export type FiltrosState = {
@@ -18,7 +18,7 @@ export type FiltrosState = {
 type Props = {
   filtros: FiltrosState;
   onFiltrosChange: (filtros: FiltrosState) => void;
-  onAplicar: (filtrosCustom?: FiltrosState) => void; // 🆕
+  onAplicar: (filtrosCustom?: FiltrosState) => void;
   onLimpiar: () => void;
   mostrarFiltros: boolean;
   onToggleFiltros: () => void;
@@ -44,17 +44,17 @@ export function TaskFilters({
     });
   };
 
-  // 🆕 FUNCIÓN MEJORADA
+
   const aplicarOrdenamiento = (ordenarPor: string, direccion: string) => {
     const nuevosFiltros: FiltrosState = {
       ...filtros,
       ordenarPor,
       direccion
     };
-    
+
     // Actualizar estado local
     onFiltrosChange(nuevosFiltros);
-    
+
     // Aplicar inmediatamente con los nuevos filtros
     onAplicar(nuevosFiltros);
   };
@@ -84,7 +84,7 @@ export function TaskFilters({
             placeholder="Buscar tareas por nombre o descripción..."
             value={filtros.busqueda}
             onChange={(e) => handleChange("busqueda", e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && onAplicar()}
+            onKeyDown={(e) => e.key === "Enter" && onAplicar()}
           />
           {filtros.busqueda && (
             <button
@@ -132,7 +132,7 @@ export function TaskFilters({
               </div>
             </div>
 
-            {/* 🆕 SECCIÓN DE ORDENAMIENTO MEJORADA */}
+
             <div className="task-filters-section">
               <h4>🔀 Ordenamiento</h4>
               <div className="task-quick-filters">
@@ -143,21 +143,21 @@ export function TaskFilters({
                 >
                   ⚡ Inteligente
                 </button>
-                
+
                 <button
                   className={`task-quick-filter ${filtros.ordenarPor === "fechaVencimiento" ? "active" : ""}`}
                   onClick={() => aplicarOrdenamiento("fechaVencimiento", "ASC")}
                 >
                   📅 Por fecha
                 </button>
-                
+
                 <button
                   className={`task-quick-filter ${filtros.ordenarPor === "importancia" ? "active" : ""}`}
                   onClick={() => aplicarOrdenamiento("importancia", "DESC")}
                 >
                   ⚡ Por importancia
                 </button>
-                
+
                 <button
                   className={`task-quick-filter ${filtros.ordenarPor === "fechaCreacion" ? "active" : ""}`}
                   onClick={() => aplicarOrdenamiento("fechaCreacion", "DESC")}
@@ -165,7 +165,7 @@ export function TaskFilters({
                   🆕 Más recientes
                 </button>
               </div>
-              
+
               {/* Tooltip explicativo */}
               {!filtros.ordenarPor && (
                 <div className="task-sort-explanation">

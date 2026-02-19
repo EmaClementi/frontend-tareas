@@ -7,7 +7,8 @@
 }
 
 .task-content {
-  max-width: 800px; /* 🆕 Más ancho para mejor lectura */
+  max-width: 800px;
+
   margin: 0 auto;
 }
 
@@ -37,11 +38,12 @@
 .task-loading,
 .task-empty,
 .task-error {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--bg-card);
   border-radius: var(--radius-lg);
   padding: var(--spacing-4xl);
   text-align: center;
   box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
 }
 
 .task-loading {
@@ -80,28 +82,16 @@
 }
 
 .task-spinner {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--bg-card);
   padding: var(--spacing-lg) var(--spacing-3xl);
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
   font-weight: var(--font-weight-semibold);
   color: var(--primary);
 }
 
-/* ========== RESULTADOS ========== */
-.task-results-info {
-  background: rgba(255, 255, 255, 0.9);
-  padding: var(--spacing-md) var(--spacing-xl);
-  border-radius: var(--radius-sm);
-  margin-bottom: var(--spacing-lg);
-  font-size: var(--font-size-sm);
-  color: var(--text-primary);
-}
 
-.task-results-info strong {
-  color: var(--primary);
-  font-weight: var(--font-weight-bold);
-}
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 640px) {
@@ -128,26 +118,97 @@
     width: 100%;
   }
 }
-.task-sort-indicator {
-  background: rgba(102, 126, 234, 0.1);
-  padding: 0.8rem 1.2rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-  color: #374151;
-  border-left: 4px solid #667eea;
+
+/* ========== COLLAPSIBLE FORM ========== */
+.task-form-section {
+  margin-bottom: var(--spacing-xl);
 }
 
-.task-sort-indicator strong {
-  color: #667eea;
-  font-weight: 700;
+.task-form-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  background: var(--bg-card);
+  border: 2px dashed var(--border-light);
+  border-radius: var(--radius-md);
+  color: var(--primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--transition-base);
 }
+
+.task-form-toggle:hover {
+  border-color: var(--primary);
+  background: var(--bg-tertiary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.task-form-toggle-open {
+  border-style: solid;
+  border-color: var(--primary);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: none;
+}
+
+.task-form-toggle-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary);
+  color: white;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.task-form-collapsible {
+  border: 2px solid var(--primary);
+  border-top: none;
+  border-bottom-left-radius: var(--radius-md);
+  border-bottom-right-radius: var(--radius-md);
+  overflow: hidden;
+  animation: formSlideDown 0.25s ease-out;
+}
+
+.task-form-collapsible .task-create {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 0;
+}
+
+@keyframes formSlideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+
+  to {
+    opacity: 1;
+    max-height: 600px;
+  }
+}
+
+
+
 /* ========== INDICADOR DE ORDENAMIENTO ========== */
 .task-results-info {
-  background: rgba(255, 255, 255, 0.9);
-  padding: var(--spacing-lg) var(--spacing-xl);
+  background: var(--bg-card);
+  padding: var(--spacing-md) var(--spacing-xl);
   border-radius: var(--radius-sm);
   margin-bottom: var(--spacing-lg);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
 }
 
 .task-sort-indicator {
@@ -169,6 +230,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -183,10 +245,11 @@
 /* Variantes de indicador según el tipo de ordenamiento */
 .task-sort-indicator[data-type="intelligent"] {
   border-color: var(--importancia-media);
-  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
 }
 
 .task-sort-indicator[data-type="custom"] {
   border-color: var(--primary);
-  background: var(--bg-tertiary);
+  background: var(--bg-card);
 }
