@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: "tareas-production-a471.up.railway.app",
 });
 
 // Interceptor de REQUEST - Agregar token automáticamente
