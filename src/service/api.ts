@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://tareas-2-i3b4.onrender.com/",
+  baseURL: "https://tareas-2-i3b4.onrender.com",
 });
 
 // Interceptor de REQUEST - Agregar token automáticamente
