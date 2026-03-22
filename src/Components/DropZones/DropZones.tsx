@@ -7,7 +7,7 @@ type Props = {
   onDragLeave: () => void;
 };
 
-export function DropZones({ onDrop }: Props) {
+export function DropZones({ onDrop, onDragLeave }: Props) {
   const [hoverZone, setHoverZone] = useState<string | null>(null);
 
   const zonas = [
@@ -48,6 +48,7 @@ export function DropZones({ onDrop }: Props) {
   const handleDragLeave = (e: React.DragEvent) => {
     if (e.currentTarget === e.target) {
       setHoverZone(null);
+      if (onDragLeave) onDragLeave();
     }
   };
 
@@ -63,7 +64,7 @@ export function DropZones({ onDrop }: Props) {
             className={`drop-zone drop-zone-${zona.color} ${hoverZone === zona.estado ? "drop-zone-hover" : ""
               }`}
             onDragOver={(e) => handleDragOver(e, zona.estado)}
-            onDragLeave={() => setHoverZone(null)}
+            onDragLeave={() => { setHoverZone(null); if (onDragLeave) onDragLeave(); }}
             onDrop={(e) => handleDrop(e, zona.estado)}
           >
             <div className="drop-zone-content">

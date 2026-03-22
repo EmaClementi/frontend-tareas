@@ -133,7 +133,13 @@ export function Task() {
 
   const actualizarTarea = async (id: number, data: Partial<TaskType>) => {
     try {
-      await api.put(`/tareas/${id}`, data);
+      const payload = { ...data } as Partial<TaskType>;
+
+      if (typeof payload.duracionDias === "number" && payload.duracionDias < 1) {
+        payload.duracionDias = 1;
+      }
+
+      await api.put(`/tareas/${id}`, payload);
       await cargarTareas(filtros);
       success("Tarea actualizada correctamente");
     } catch {

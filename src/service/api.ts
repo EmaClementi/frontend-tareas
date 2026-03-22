@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://tareas-production-a471.up.railway.app/",
+  baseURL: "https://tareas-2-i3b4.onrender.com/",
 });
 
 // Interceptor de REQUEST - Agregar token automáticamente

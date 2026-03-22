@@ -50,7 +50,7 @@ export function TaskCard({ task, onUpdate, onRequestDelete, onDragStart, onDragE
       descripcion,
       estado,
       importancia,
-      duracionDias: duracionDias,
+      duracionDias,
       fechaInicio: fechaInicio || null,
       fechaVencimiento: fechaVencimiento || null,
     });
