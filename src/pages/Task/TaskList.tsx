@@ -204,15 +204,6 @@ export function Task() {
     }
   };
 
-  const handleDragLeave = () => {
-    if (dragTimeoutRef.current !== null) {
-      clearTimeout(dragTimeoutRef.current);
-    }
-
-    setDraggedTask(null);
-    setShowDropZones(false);
-  };
-
 
   if (loading && tasks.length === 0) {
     return (
@@ -237,7 +228,7 @@ export function Task() {
     <AnimatedPage>
       <div className="task-container">
         {showDropZones && (
-          <DropZones onDrop={handleDrop} onDragLeave={handleDragLeave} />
+          <DropZones onDrop={handleDrop} />
         )}
 
         <div className="task-content">
@@ -346,7 +337,10 @@ export function Task() {
                 onUpdate={actualizarTarea}
                 onRequestDelete={setTaskToDelete}
                 onDragStart={handleDragStart}
-                onDragEnd={() => setShowDropZones(false)}
+                onDragEnd={() => {
+                  setShowDropZones(false);
+                  setDraggedTask(null);
+                }}
               />
             ))}
           </AnimatePresence>
