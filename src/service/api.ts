@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://168.75.96.142:8080",
+  baseURL: "https://corps-format-guidance-strategic.trycloudflare.com",
 });
 
 // Interceptor de REQUEST - Agregar token automáticamente
