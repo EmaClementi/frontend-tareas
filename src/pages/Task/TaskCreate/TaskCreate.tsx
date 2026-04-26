@@ -80,6 +80,7 @@ export function TaskCreate({ onTaskCreated }: TaskCreateProps) {
 
       <FormInput
         type="select"
+        label="Importancia"
         value={importancia}
         onChange={(e) => setImportancia(e.target.value)}
         options={[
