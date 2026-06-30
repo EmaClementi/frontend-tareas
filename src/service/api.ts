@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://corps-format-guidance-strategic.trycloudflare.com",
+  baseURL: "https://bingo-paso-make-accessories.trycloudflare.com",
 });
 
 // Interceptor de REQUEST - Agregar token automáticamente
