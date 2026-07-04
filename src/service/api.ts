@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://collaboration-piece-congressional-airplane.trycloudflare.com",
+  baseURL: "https://spring-fotos-cuisine-hopefully.trycloudflare.com",
 });
 
 // Interceptor de REQUEST - Agregar token automáticamente
