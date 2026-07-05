@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://spring-fotos-cuisine-hopefully.trycloudflare.com",
+  baseURL: "https://tustareas.dpdns.org",
 });
 
 // Interceptor de REQUEST - Agregar token automáticamente
